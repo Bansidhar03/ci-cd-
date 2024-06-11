@@ -11,5 +11,4 @@ jobs:
       - name: Build and push Docker image
         run: |
          dockerlogin --username Bansidhar03 --password ${{ secrets.SECRET_GITHUBAC }} ghcr.io
-         docker build . --tag ghcr.io/Bansidhar03/node.js:14
          docker push ghcr.io/Bansidhar03/node.js:14
