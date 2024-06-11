@@ -10,5 +10,5 @@ jobs:
         uses: actions/checkout@v3
       - name: Build and push Docker image
         run: |
-         dockerlogin --username Bansidhar03 --password ${{ secrets.SECRET_GITHUBAC }} ghcr.io
+         docker login --username Bansidhar03 --password ${{ secrets.SECRET_GITHUBAC }} ghcr.io
          docker push ghcr.io/Bansidhar03/node.js:14
