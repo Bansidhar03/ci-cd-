@@ -25,7 +25,7 @@ jobs:
         run: echo "${{ secrets.SECRET_GITHUBAC }}" | docker login ghcr.io -u bansidhar03 --password-stdin
 
       - name: Build Docker image
-        run: docker build . --tag ghcr.io/bansidhar03/node:14
+        run: docker build . --tag ghcr.io/bansidhar03/python:3.12.3
 
       - name: Push Docker image
-        run: docker push ghcr.io/bansidhar03/node:14
+        run: docker push ghcr.io/bansidhar03/python:3.12.3
