@@ -25,7 +25,7 @@ jobs:
         run: npm test
 
       - name: Log in to GitHub Container Registry
-        run: echo "${{ secrets.GITHUBSECRET }}" | docker login ghcr.io -u bansidhar03 --password-stdin
+        run: echo "${{ secrets.SECRET_GITHUBAC }}" | docker login ghcr.io -u bansidhar03 --password-stdin
 
       - name: Build Docker image
         run: docker build . --tag ghcr.io/bansidhar03/node:14
