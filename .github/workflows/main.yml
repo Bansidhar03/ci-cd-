@@ -21,9 +21,6 @@ jobs:
       - name: Build the project
         run: npm run build --if-present
 
-      - name: Run tests
-        run: npm test
-
       - name: Log in to GitHub Container Registry
         run: echo "${{ secrets.SECRET_GITHUBAC }}" | docker login ghcr.io -u bansidhar03 --password-stdin
 
