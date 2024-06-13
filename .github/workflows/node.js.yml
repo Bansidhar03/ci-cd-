@@ -1,31 +1,15 @@
-name: Build/Push Docker Image
+name: Build and Push Docker image to Docker Hub 
 
-on: 
- push: 
-   branch: master
-   pull_request: master
-
-   jobs: 
-    build: 
-
+on: push
+jobs:
+  build_and_publish:
+    name: Push Docker image to github package
     runs-on: ubuntu-latest
-    
-    steps: 
-     - uses: actions/checkout@4
-     - name: use node.js
-       uses: action/setip-node@4
-       with:
-        node-version: ['17.9.0']
-     - name: install dependencies
-       run: npm install
-     - run: npm run build --if -present
-     - run: npm test
-     - name: build and push docker image to git hub package 
-     - name: Check out the repo
-       uses: actions/checkout@v4
-     - name: Build and push Docker image
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+      - name: Build and push Docker image
         run: |
          docker login --username bansidhar03 --password ${{ secrets.SECRET_GITHUBAC }} ghcr.io
-         docker build . --tag ghcr.io/bansidhar03/node.js:14
-         docker push ghcr.io/bansidhar03/node.js:14
-
+         docker build . --tag ghcr.io/bansidhar03/python:3.12.3
+         docker push ghcr.io/bansidhar03/python:3.12.3
