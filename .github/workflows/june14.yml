@@ -1,4 +1,4 @@
-name: create and publish a docker image
+name: Newcreate and publish a docker image
 on: 
  push: 
   branches: [main]
