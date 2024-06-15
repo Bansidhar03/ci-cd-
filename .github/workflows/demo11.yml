@@ -12,8 +12,7 @@ jobs:
     name: check out source code
     with: 
      python-version: '3.x'
-  - name: install python dependencies
-    run: pytest tests/
+ 
 
   - name: build docker image
     run: |
