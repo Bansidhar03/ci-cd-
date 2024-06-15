@@ -21,11 +21,12 @@ jobs:
   - name: build docker image
     run: |
      docker build -t python:3
-  - name: log in to docker registory
-    uses: docker/login-actions@v3
+  - name: log in to the container registry
+    uses: docker/login-action@v3
     with: 
-     username: ${{ secrect.DOCKER_USERNAME}}
-     password: ${{ secrect.Dockr_PASSWORD}}
+     registry: ${{ env.REGISTRY }}
+     username: ${{ github.actor }}
+     password: ${{ secrets.SECRET_GITHUBAC }}
   - name: push docker image to registry
     run: |
      docker push python:3 
