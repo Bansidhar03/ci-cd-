@@ -1,0 +1,31 @@
+name: ci integeration
+on: 
+ push: 
+  branches: [main]
+ pull_request: 
+  branches: [main]
+jobs: 
+ build-and-test:
+  runs-on: ubuntu-latest
+  steps: 
+  - uses: actions/checlout@v4
+    name: check out source code
+  - name: set up python
+    uses: actions/setup-python@5
+    with: 
+     python-version: '3.x'
+  - name: install python dependencies
+    run: pytest tests/
+  - name: setup docker 
+    uses: docker/setup-build-actions@v3
+  - name: build docker image
+    run: |
+     docker build -t python:3
+  - name: log in to docker registory
+    uses: docker/login-actions@v3
+    with: 
+     username: ${{ secrect.DOCKER_USERNAME}}
+     password: ${{ secrect.Dockr_PASSWORD}}
+  - name: push docker image to registry
+    run: |
+     docker push python:3 
