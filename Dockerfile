@@ -21,7 +21,7 @@ RUN apt-get update && apt-get install -y gcc python3-dev musl-dev netcat
 COPY . .
 
 # Upgrade pip to the latest version
-RUN pip install --upgrade pip
+Run python -m pip install --upgrade pip
 
 # Expose port 8000 to allow communication to/from server
 EXPOSE 8000
