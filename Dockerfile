@@ -16,4 +16,4 @@ RUN pip install --upgrade pip
 EXPOSE 8000
 
 # run entrypoint.sh
-# # ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
+ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
