@@ -1,26 +1,27 @@
-# Use the official Python image from the Docker Hub as a base image
-FROM python:3.10-slim
+# pull official base image
+FROM python:3.12.3
 
-# Set the working directory in the container
-WORKDIR /app
+# set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
-# Copy the requirements file into the container at /app
-COPY requirements.txt /app/
+# install psycopg2 dependencies
+RUN apt-get -y update && apt-get -y upgrade
+RUN apt-get install -y gcc python3-dev musl-dev netcat-traditional
 
-# Install any dependencies specified in requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
 
-# Ensure Flask is installed and available in the PATH
-RUN pip install flask
+# set work directory
+WORKDIR /usr/src/app
 
-# Copy the rest of the application code into the container at /app
-COPY . /app
 
-# Expose the port that the Flask app runs on
-EXPOSE 5000
+# install dependencies
+RUN pip install --upgrade pip
+COPY ./requirements.txt .
+RUN pip install -r requirements.txt
 
-# Set the environment variable to tell Flask to run the app
-ENV FLASK_APP=app.py
+# copy project
+COPY . .
 
-# Specify the command to run on container start
-CMD ["flask", "run", "--host=0.0.0.0"]
+
+# run entrypoint.sh
+# # ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
