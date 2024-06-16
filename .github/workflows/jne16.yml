@@ -1,38 +1,51 @@
-name: cicd pipeline
-on: 
- push: 
-  branches: [master]
- pull_request:
-  branches: [master]
-jobs: 
- build:
-  runs-on: ubuntu-latest
-  steps: 
-  - name: checkout code
-    uses: actions/checkout@v2
-  - name: set up python
-    uses: actions/setup-python@v2
-    with: 
-     python-version: '3'
-  - name: innstall dependencies
-    run: |
-     pytest
- deploy:
-  needs: build
-  runs-on: ubuntu-latest
-  if: github.ref == 'refs/heads/master'
+name: CI/CD Pipeline
 
-  steps: 
-  - name: set up python
-    uses: action/setup-python@v2
-    with: 
-     python-version: '3'
-  - name: install dependencies
-    run: |
-     python -m pip install --upgrade pip
-     pip install -r requirements.txt
-  - name: deployment to production
-    run: |
-     echo "Deploying application"
-     
- 
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pytest
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Deployment to production
+        run: |
+          echo "Deploying application"
+          # Add your deployment commands here
