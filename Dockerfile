@@ -1,19 +1,30 @@
-# pull official base image
+# Use the official Python image from Docker Hub
 FROM python:3
+
+# Set the working directory inside the container
 WORKDIR /usr/src/app
-# set environment variables
+
+# Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
-COPY requirements.txt /app
+
+# Copy requirements.txt to the container at /usr/src/app/
+COPY requirements.txt .
+
+# Install dependencies from requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
-# install psycopg2 dependencies
-RUN apt-get -y update && apt-get -y upgrade
-RUN apt-get install -y gcc python3-dev musl-dev netcat-traditional
-COPY . /usr/src/app
-# set work directory
-# install dependencies
+
+# Install psycopg2 dependencies (assuming you need it for PostgreSQL)
+RUN apt-get update && apt-get install -y gcc python3-dev musl-dev netcat
+
+# Copy the current directory contents into the container at /usr/src/app/
+COPY . .
+
+# Upgrade pip to the latest version
 RUN pip install --upgrade pip
+
+# Expose port 8000 to allow communication to/from server
 EXPOSE 8000
 
-# run entrypoint.sh
+# Run entrypoint.sh when the container starts
 ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
