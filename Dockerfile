@@ -21,6 +21,7 @@ RUN pip install -r requirements.txt
 EXPOSE 8000
 # copy project
 COPY . .
+EXPOSE 8000
 
 
 # run entrypoint.sh
