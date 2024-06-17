@@ -1,1 +1,7 @@
 
+pytest
+flake8
+requests
+numpy
+pandas
+pytest-playwright
