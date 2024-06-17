@@ -61,4 +61,9 @@ jobs:
             # Tag and push the Docker image
             docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
             docker push $IMAGE_ID:$VERSION
+
+      - name: Pull and run Docker image from GitHub Package Registry
+        run: |
+         docker pull ${{ env.PACKAGE_REGISTRY_URL }}/${{ env.REPOSITORY }}
+         docker run --detach --publish 2000:3000 ${{ env.PACKAGE_REGISTRY_URL }}/${{ env.REPOSITORY }}  
         
