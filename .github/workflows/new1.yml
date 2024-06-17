@@ -1,21 +1,27 @@
-name: CI
+name: Docker Image Push
 
 on:
   push:
     branches:
-      - master # Adjust branch name if necessary
+      - master
+    tags:
+      - v*
   pull_request:
-    branches:
-      - master # Adjust branch name if necessary
+
+env:
+  IMAGE_NAME: dillip_image   # display image name
 
 jobs:
-  build:
+  push:
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
-
+      
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -30,31 +36,29 @@ jobs:
         run: |
           python -m playwright install
 
-      - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v2
-        with:
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v4
-        with:
-          images: ghcr.io/${{ github.repository }}
-
-      - name: Build and push Docker image
-        id: push
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          file: ./Dockerfile
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-
-      - name: Generate artifact attestation
-        uses: actions/attest-build-provenance@v1
-        with:
-          subject-name: ghcr.io/${{ github.repository }}
-          subject-digest: ${{ steps.push.outputs.digest }}
-          push-to-registry: true
+      - name: Build and push Docker image to GHCR
+        env:
+            IMAGE_NAME: auditorsdesk_v2
+        run: |
+            docker build . --file Dockerfile --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
+            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+        
+            # Construct full image ID with GHCR repository owner
+            IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
+            IMAGE_ID=$(echo $IMAGE_ID | tr '[:upper:]' '[:lower:]')  # Convert to lowercase
+        
+            # Determine version from GitHub ref (branch or tag)
+            VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+            if [[ "$VERSION" == "refs/tags/"* ]]; then
+              VERSION=$(echo $VERSION | sed -e 's/^refs\/tags\///' | sed -e 's/^v//')
+            else
+              VERSION="latest"
+            fi
+        
+            echo "IMAGE_ID=$IMAGE_ID"
+            echo "VERSION=$VERSION"
+        
+            # Tag and push the Docker image
+            docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
+            docker push $IMAGE_ID:$VERSION
+        
