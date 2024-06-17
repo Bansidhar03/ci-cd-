@@ -12,7 +12,7 @@ env:
   IMAGE_NAME: dillip_image   # display image name
 
 jobs:
-  push:
+  build:
     runs-on: ubuntu-latest
     permissions:
       packages: write
@@ -66,4 +66,22 @@ jobs:
       #   run: |
       #    docker pull ${{ env.PACKAGE_REGISTRY_URL }}/${{ env.REPOSITORY }}
       #    docker run --detach --publish 8000:8000 ${{ env.PACKAGE_REGISTRY_URL }}/${{ env.REPOSITORY }}  
+
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'  # Specify your Python version
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
         
