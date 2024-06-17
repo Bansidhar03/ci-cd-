@@ -3,10 +3,10 @@ name: CI
 on:
   push:
     branches:
-      - github-action_cicd # Adjust branch name if necessary
+      - master # Adjust branch name if necessary
   pull_request:
     branches:
-      - github-action_cicd # Adjust branch name if necessary
+      - master # Adjust branch name if necessary
 
 jobs:
   build:
