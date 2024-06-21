@@ -4,8 +4,9 @@ on:
  push:
   branches: [master]
 jobs:
-  build:
-    services:
+ build:
+  runs-on: ubuntu-latest
+   services:
       redis:
         # Docker Hub image
         image: redis
