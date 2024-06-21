@@ -1,0 +1,30 @@
+name: image publish
+
+on: 
+ push:
+  branches: [master]
+jobs: 
+ build: 
+  runs-on: ubuntu-latest
+  steps: 
+   - name: checkout repository
+     uses: actions/repository@v4
+   - name: login to github container registry
+     id:  ubuntu
+     uses: docker/login-action@3
+     with: 
+      registry: ghcr.io
+      username: ${{ github.actor }}
+      password: ${{ secrets.GITHUB_TOKEN }}
+
+   - name: build and push docker image
+     uses: docker/build-push-action@v6
+     env:
+      IMAGE_NAME: dillip_image22
+     
+      run: |
+       docker build -t $IMAGE_NAME "runnumber=${GITHUB_RUN_ID}"
+
+       VERSION="$GITHUB_SHA"
+
+       docker tag $IMAGE_NAME=$IMAGE_ID:$VERSION
