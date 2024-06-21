@@ -24,7 +24,9 @@ jobs:
      
       run: |
        docker build -t $IMAGE_NAME "runnumber=${GITHUB_RUN_ID}"
-
+       
        VERSION="$GITHUB_SHA"
 
        docker tag $IMAGE_NAME=$IMAGE_ID:$VERSION
+       docker push $IMAGE:$VERSION:$ 
+
