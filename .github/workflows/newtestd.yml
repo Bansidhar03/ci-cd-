@@ -20,7 +20,7 @@ jobs:
    - name: build and push docker image
      uses: docker/build-push-action@v6
      env:
-      IMAGE_NAME: dillip_image22
+      IMAGE_NAME: delhi_image22
      
       run: |
        docker build -t $IMAGE_NAME "runnumber=${GITHUB_RUN_ID}"
