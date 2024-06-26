@@ -1,0 +1,60 @@
+name: stat-audit
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to GitHub Container Registry
+        id: ubuntu
+        uses: docker/login-action@v3
+        with:
+         registry: ghcr.io
+         username: ${{ github.actor }}
+         password: ${{ secrets.GITHUB_TOKEN }}
+
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: user/app:latest
+
+      # - name: Build and push Docker image
+      #   env:
+      #    IMAGE_NAME: stat-audit
+      #   run: |
+      #    # Build the Docker image with the correct Dockerfile path
+      #     docker build --file frontend/Dockerfile --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}" --build-arg user=myuser --build-arg uid=1001 frontend
+  
+      #      # Construct full image ID with GHCR repository owner
+      #     IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
+      #     IMAGE_ID=$(echo $IMAGE_ID | tr '[:upper:]' '[:lower:]')  # Convert to lowercase
+  
+      #      # Determine version from GitHub ref (branch or tag)
+      #     if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+      #     VERSION=${GITHUB_REF#refs/tags/}
+      #     else
+      #     VERSION="$GITHUB_SHA"
+      #     fi
+
+      #      echo "IMAGE_ID=$IMAGE_ID"
+      #      echo "VERSION=$VERSION"
+
+      #     # Tag and push the Docker image
+      #     docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
+      #     docker push $IMAGE_ID:$VERSION
