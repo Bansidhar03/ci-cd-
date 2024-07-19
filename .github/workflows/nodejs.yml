@@ -1,28 +1,29 @@
 name: cloud-api
 
-
 on:
- push:
-   branches:
-     - master
+  push:
+    branches:
+      - master
+
 jobs:
- build:
-   runs-on: ubuntu-latest
-   permissions:
-     packages: write
-     contents: read
-   steps:
-     - name: Checkout repository
-       uses: actions/checkout@v4
-     - name: Log in to GitHub Container Registry
-       id: ubuntu
-       uses: docker/login-action@v3
-       with:
-        registry: ghcr.io
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-     - name: Build and push Docker image
-       run: |
-        # Build the Docker image with the correct Dockerfile path
-        docker build -t ghcr.io/integrationninjas/nodejs-app .
-        docker push ghcr.io/integrationninjas/nodejs-app:latest
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to GitHub Container Registry
+        id: login
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        run: |
+          docker build -t ghcr.io/${{ github.repository }}/nodejs-app:latest .
+          docker push ghcr.io/${{ github.repository }}/nodejs-app:latest
