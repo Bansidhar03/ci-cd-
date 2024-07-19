@@ -5,23 +5,15 @@ on:
  push:
    branches:
      - master
- pull_request:
-  
-
-
 jobs:
  build:
    runs-on: ubuntu-latest
    permissions:
      packages: write
      contents: read
-
-
    steps:
      - name: Checkout repository
        uses: actions/checkout@v4
-
-
      - name: Log in to GitHub Container Registry
        id: ubuntu
        uses: docker/login-action@v3
@@ -29,11 +21,7 @@ jobs:
         registry: ghcr.io
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
-
-
      - name: Build and push Docker image
-       # env:
-       #  IMAGE_NAME: cloud-api
        run: |
         # Build the Docker image with the correct Dockerfile path
         docker build -t ghcr.io/integrationninjas/nodejs-app .
