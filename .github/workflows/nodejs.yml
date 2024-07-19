@@ -32,3 +32,6 @@ jobs:
           # Build and push the Docker image
           docker build -t ghcr.io/$CLEAN_REPO_NAME/nodejs-app:latest .
           docker push ghcr.io/$CLEAN_REPO_NAME/nodejs-app:latest
+          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[:upper:]' '[:lower:]')  # Convert to lowerc
+
