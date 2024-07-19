@@ -1,21 +1,24 @@
 name: cicd
 on: 
- push:
-  branches: [master]
+  push:
+    branches: [master]
 jobs: 
- build: 
-  runs-on: [ubuntu-latest]
-  steps: 
-   - name: checkout code
-     uses: actions/checkout@v4
-   - name:  log in to github container registry
-     id: ubuntu
-     uses: docker/login-action@3
-     with:
-      registry: ghcr.io
-      username: ${{ github.actor }}
-      password: ${{ secrets.GITHUB_TOKEN }}
-   - name: build and push docker image
-     run: docker build -t integrationninjas/nodejs-app .
-   - name: publish image to github package
-     run: docker push integrationninjas/nodejs-app:lates
+  build: 
+    runs-on: ubuntu-latest
+    steps: 
+      - name: checkout code
+        uses: actions/checkout@v4
+
+      - name: log in to github container registry
+        id: ubuntu
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: build and push docker image
+        run: docker build -t integrationninjas/nodejs-app .
+
+      - name: publish image to github package
+        run: docker push integrationninjas/nodejs-app:latest
