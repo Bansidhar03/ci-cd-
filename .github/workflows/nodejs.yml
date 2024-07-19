@@ -4,7 +4,7 @@ name: cloud-api
 on:
  push:
    branches:
-     - main 
+     - master
  pull_request:
   
 
