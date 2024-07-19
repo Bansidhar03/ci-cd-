@@ -1,0 +1,20 @@
+name: cicd
+on: 
+ push:
+  branches: [master]
+jobs: 
+ build: 
+  runs-on: [ubuntu-latest]
+  steps: 
+   - name: checkout code
+     uses: action/checkout@v4
+   - name:  loh in to github container registry
+     uses: docker/login-action@3
+     with:
+      registry: ghcr.io
+      username: ${{ github.actor }}
+      password: ${{ secrets.GITHUB_TOKEN }}
+   - name: build and push docker image
+     run: docker build -t integrationninjas/nodejs-app .
+   - name: publish image to github package
+     run: docker push integrationninjas/nodejs-app:lates
