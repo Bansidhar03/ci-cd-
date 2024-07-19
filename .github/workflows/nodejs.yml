@@ -32,8 +32,9 @@ jobs:
 
 
      - name: Build and push Docker image
-       env:
-        IMAGE_NAME: cloud-api
+       # env:
+       #  IMAGE_NAME: cloud-api
        run: |
         # Build the Docker image with the correct Dockerfile path
-         docker build cloud-api --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
+        docker build -t ghcr.io/integrationninjas/nodejs-app .
+        docker push ghcr.io/integrationninjas/nodejs-app:latest
