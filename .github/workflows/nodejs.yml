@@ -21,9 +21,12 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.CR_PAT }}
 
-      - name: Build and push Docker image
+      - name: Build Docker image
         run: |
-          docker build -t ghcr.io/${{ github.repository }}/nodejs-app:latest .
-          docker push ghcr.io/${{ github.repository }}/nodejs-app:latest
+          docker build -t ghcr.io/Bansidhar03/ci-cd/nodejs-app:latest .
+
+      - name: Push Docker image
+        run: |
+          docker push ghcr.io/Bansidhar03/ci-cd/nodejs-app:latest
