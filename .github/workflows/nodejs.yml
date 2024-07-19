@@ -27,11 +27,13 @@ jobs:
         run: |
           # Extract the repository name from the environment variable
           REPO_NAME=${{ github.repository }}
-          # Remove any trailing dashes or invalid characters
-          CLEAN_REPO_NAME=$(echo "$REPO_NAME" | sed 's/-$//')
-          # Build and push the Docker image
+          # Remove any trailing dashes and convert to lowercase
+          # The 'sed' command removes trailing dashes
+          # The 'tr' command converts the repository name to lowercase, ensuring it complies with Docker tag requirements
+          CLEAN_REPO_NAME=$(echo "$REPO_NAME" | sed 's/-$//' | tr '[:upper:]' '[:lower:]')
+          # Build and push the Docker image with cleaned-up repository name
           docker build -t ghcr.io/$CLEAN_REPO_NAME/nodejs-app:latest .
           docker push ghcr.io/$CLEAN_REPO_NAME/nodejs-app:latest
-          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
-          IMAGE_ID=$(echo $IMAGE_ID | tr '[:upper:]' '[:lower:]')  # Convert to lowerc
-
+        env:
+          # Ensure that the GITHUB_TOKEN is passed to Docker commands
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
